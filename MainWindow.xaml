@@ -67,6 +67,13 @@
             
             <Separator Margin="5,0"/>
             
+            <!-- Font Family -->
+            <Label Content="Font:" VerticalAlignment="Center" FontWeight="Bold"/>
+            <ComboBox x:Name="FontFamilyComboBox" Width="120" Height="25" VerticalAlignment="Center"
+                      SelectionChanged="FontFamilyComboBox_SelectionChanged"/>
+            
+            <Separator Margin="5,0"/>
+            
             <!-- Undo/Redo -->
             <Button x:Name="UndoButton" Width="32" Height="32" Margin="2" Click="UndoButton_Click" ToolTip="Undo (Ctrl+Z)">
                 <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>

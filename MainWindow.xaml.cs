@@ -13,6 +13,7 @@ using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Button = System.Windows.Controls.Button;
 using Color = System.Windows.Media.Color;
+using FontFamily = System.Windows.Media.FontFamily;
 using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Point = System.Windows.Point;
@@ -29,6 +30,7 @@ public partial class MainWindow : Window
     private Brush _currentBrush = Brushes.Black;
     private double _strokeThickness = 3;
     private double _fontSize = 14;
+    private FontFamily _fontFamily = new FontFamily("Segoe UI");
     private Ellipse? _cursorPreview;
 
     // Commands for keyboard shortcuts
@@ -46,6 +48,12 @@ public partial class MainWindow : Window
         DataContext = this;
         
         InitializeComponent();
+        
+        // Populate font family ComboBox
+        if (FontFamilyComboBox != null)
+        {
+            PopulateFontFamilyComboBox();
+        }
         
         // Create cursor preview ellipse for eraser
         _cursorPreview = new Ellipse
@@ -110,7 +118,7 @@ public partial class MainWindow : Window
 
     private void TextButton_Click(object sender, RoutedEventArgs e)
     {
-        _currentTool = new TextTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager };
+        _currentTool = new TextTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, FontFamily = _fontFamily, CommandManager = _commandManager };
         HideCursorPreview();
         UpdateToolButtonStyles();
     }
@@ -195,6 +203,39 @@ public partial class MainWindow : Window
         {
             ThicknessLabel.Content = ((int)_strokeThickness).ToString();
         }
+    }
+
+    // Font family selection handler
+    private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (FontFamilyComboBox?.SelectedItem is string fontName)
+        {
+            _fontFamily = new FontFamily(fontName);
+
+            if (_currentTool != null)
+            {
+                _currentTool.FontFamily = _fontFamily;
+            }
+        }
+    }
+
+    private void PopulateFontFamilyComboBox()
+    {
+        // Add common fonts
+        var commonFonts = new[] 
+        { 
+            "Segoe UI", "Arial", "Times New Roman", "Verdana", 
+            "Courier New", "Georgia", "Tahoma", "Trebuchet MS", 
+            "Comic Sans MS", "Impact", "Calibri", "Consolas"
+        };
+
+        FontFamilyComboBox.Items.Clear();
+        foreach (var fontName in commonFonts)
+        {
+            FontFamilyComboBox.Items.Add(fontName);
+        }
+        
+        FontFamilyComboBox.SelectedIndex = 0; // Select first font (Segoe UI)
     }
 
     // Command execution methods for keyboard shortcuts
