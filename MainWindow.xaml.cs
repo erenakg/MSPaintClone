@@ -9,6 +9,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MSPaintClone.DrawingTools;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Button = System.Windows.Controls.Button;
+using Color = System.Windows.Media.Color;
+using MessageBox = System.Windows.MessageBox;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using Point = System.Windows.Point;
 
 namespace MSPaintClone;
 
@@ -146,7 +153,9 @@ public partial class MainWindow : Window
         {
             var selectedColor = colorDialog.Color;
             var mediaColor = Color.FromArgb(selectedColor.A, selectedColor.R, selectedColor.G, selectedColor.B);
-            _currentBrush = new SolidColorBrush(mediaColor);
+            var brush = new SolidColorBrush(mediaColor);
+            brush.Freeze(); // Freeze for cross-thread access
+            _currentBrush = brush;
 
             if (_currentTool != null)
             {
@@ -154,7 +163,7 @@ public partial class MainWindow : Window
             }
 
             // Update the More Colors button background to show selected color
-            MoreColorsButton.Background = _currentBrush;
+            MoreColorsButton.Background = new SolidColorBrush(mediaColor);
 
             // Clear selection from preset color buttons
             ClearColorButtonSelection();
