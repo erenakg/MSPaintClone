@@ -102,25 +102,47 @@ public partial class MainWindow : Window
         UpdateToolButtonStyles();
     }
 
-    private void RectangleButton_Click(object sender, RoutedEventArgs e)
-    {
-        _currentTool = new RectangleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager };
-        HideCursorPreview();
-        UpdateToolButtonStyles();
-    }
-
-    private void CircleButton_Click(object sender, RoutedEventArgs e)
-    {
-        _currentTool = new CircleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager };
-        HideCursorPreview();
-        UpdateToolButtonStyles();
-    }
-
     private void TextButton_Click(object sender, RoutedEventArgs e)
     {
         _currentTool = new TextTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, FontFamily = _fontFamily, CommandManager = _commandManager };
         HideCursorPreview();
         UpdateToolButtonStyles();
+    }
+
+    // Shapes ComboBox selection handler
+    private void ShapesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // Just updates the selection, actual tool change happens on button click or double-click
+    }
+
+    // Draw Shape button click - activates the selected shape tool
+    private void DrawShapeButton_Click(object sender, RoutedEventArgs e)
+    {
+        ActivateSelectedShapeTool();
+    }
+
+    private void ActivateSelectedShapeTool()
+    {
+        if (ShapesComboBox?.SelectedItem is ComboBoxItem selectedItem && selectedItem.Tag is string shapeType)
+        {
+            _currentTool = shapeType switch
+            {
+                "Line" => new LineTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Rectangle" => new RectangleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Circle" => new CircleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Triangle" => new TriangleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Diamond" => new DiamondTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Pentagon" => new PentagonTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Hexagon" => new HexagonTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Star" => new StarTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Arrow" => new ArrowTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "RightArrow" => new RightArrowTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Heart" => new HeartTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                _ => new LineTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager }
+            };
+            HideCursorPreview();
+            UpdateToolButtonStyles();
+        }
     }
 
     // Color picker handler
@@ -318,9 +340,8 @@ public partial class MainWindow : Window
         PencilButton.FontWeight = FontWeights.Normal;
         EraserButton.FontWeight = FontWeights.Normal;
         BucketButton.FontWeight = FontWeights.Normal;
-        RectangleButton.FontWeight = FontWeights.Normal;
-        CircleButton.FontWeight = FontWeights.Normal;
         TextButton.FontWeight = FontWeights.Normal;
+        DrawShapeButton.FontWeight = FontWeights.Normal;
 
         // Highlight current tool
         if (_currentTool is PencilTool)
@@ -329,12 +350,10 @@ public partial class MainWindow : Window
             EraserButton.FontWeight = FontWeights.Bold;
         else if (_currentTool is BucketTool)
             BucketButton.FontWeight = FontWeights.Bold;
-        else if (_currentTool is RectangleTool)
-            RectangleButton.FontWeight = FontWeights.Bold;
-        else if (_currentTool is CircleTool)
-            CircleButton.FontWeight = FontWeights.Bold;
         else if (_currentTool is TextTool)
             TextButton.FontWeight = FontWeights.Bold;
+        else // Any shape tool
+            DrawShapeButton.FontWeight = FontWeights.Bold;
     }
 
     private void UpdateColorButtonStyles()

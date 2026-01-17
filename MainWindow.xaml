@@ -34,14 +34,28 @@
             <Button x:Name="BucketButton" Width="32" Height="32" Margin="2" Click="BucketButton_Click" ToolTip="Fill">
                 <TextBlock Text="&#xE771;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
             </Button>
-            <Button x:Name="RectangleButton" Width="32" Height="32" Margin="2" Click="RectangleButton_Click" ToolTip="Rectangle">
-                <TextBlock Text="&#xE739;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
-            </Button>
-            <Button x:Name="CircleButton" Width="32" Height="32" Margin="2" Click="CircleButton_Click" ToolTip="Circle">
-                <TextBlock Text="&#xEA3A;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
-            </Button>
             <Button x:Name="TextButton" Width="32" Height="32" Margin="2" Click="TextButton_Click" ToolTip="Text">
                 <TextBlock Text="&#xE8D2;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            
+            <!-- Shapes Dropdown -->
+            <Label Content="Shapes:" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
+            <ComboBox x:Name="ShapesComboBox" Width="130" Height="28" VerticalAlignment="Center"
+                      SelectionChanged="ShapesComboBox_SelectionChanged">
+                <ComboBoxItem Content="Line" Tag="Line" IsSelected="True"/>
+                <ComboBoxItem Content="Rectangle" Tag="Rectangle"/>
+                <ComboBoxItem Content="Circle" Tag="Circle"/>
+                <ComboBoxItem Content="Triangle" Tag="Triangle"/>
+                <ComboBoxItem Content="Diamond" Tag="Diamond"/>
+                <ComboBoxItem Content="Pentagon" Tag="Pentagon"/>
+                <ComboBoxItem Content="Hexagon" Tag="Hexagon"/>
+                <ComboBoxItem Content="Star" Tag="Star"/>
+                <ComboBoxItem Content="Arrow" Tag="Arrow"/>
+                <ComboBoxItem Content="Right Arrow" Tag="RightArrow"/>
+                <ComboBoxItem Content="Heart" Tag="Heart"/>
+            </ComboBox>
+            <Button x:Name="DrawShapeButton" Width="32" Height="32" Margin="2" Click="DrawShapeButton_Click" ToolTip="Draw Selected Shape">
+                <TextBlock Text="&#xE739;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
             </Button>
             
             <Separator Margin="5,0"/>
