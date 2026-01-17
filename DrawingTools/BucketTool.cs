@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
+using FontFamily = System.Windows.Media.FontFamily;
 using Point = System.Windows.Point;
 
 namespace MSPaintClone.DrawingTools;
@@ -17,6 +18,7 @@ public class BucketTool : IDrawingTool
     public Brush CurrentBrush { get; set; } = Brushes.Black;
     public double StrokeThickness { get; set; } = 2;
     public double FontSize { get; set; } = 14;
+    public FontFamily? FontFamily { get; set; }
     public CommandManager? CommandManager { get; set; }
 
     public void OnMouseDown(Canvas canvas, Point position)

@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
+using FontFamily = System.Windows.Media.FontFamily;
 using Point = System.Windows.Point;
 
 namespace MSPaintClone.DrawingTools;
@@ -25,6 +26,11 @@ public interface IDrawingTool
     /// Gets or sets the font size for text tools.
     /// </summary>
     double FontSize { get; set; }
+
+    /// <summary>
+    /// Gets or sets the font family for text tools.
+    /// </summary>
+    FontFamily? FontFamily { get; set; }
 
     /// <summary>
     /// Gets or sets the CommandManager for undo/redo support.

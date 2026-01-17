@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
+using FontFamily = System.Windows.Media.FontFamily;
 using Point = System.Windows.Point;
 
 namespace MSPaintClone.DrawingTools;
@@ -20,6 +21,7 @@ public class EraserTool : IDrawingTool
     public Brush CurrentBrush { get; set; } = Brushes.White;
     public double StrokeThickness { get; set; } = 10; // Default larger for eraser
     public double FontSize { get; set; } = 14;
+    public FontFamily? FontFamily { get; set; }
     public CommandManager? CommandManager { get; set; }
 
     public void OnMouseDown(Canvas canvas, Point position)
