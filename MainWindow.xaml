@@ -6,6 +6,14 @@
         xmlns:local="clr-namespace:MSPaintClone"
         mc:Ignorable="d"
         Title="MS Paint Clone" Height="600" Width="900">
+    
+    <!-- Keyboard Shortcuts -->
+    <Window.InputBindings>
+        <KeyBinding Key="Z" Modifiers="Ctrl" Command="{Binding UndoCommand}"/>
+        <KeyBinding Key="Y" Modifiers="Ctrl" Command="{Binding RedoCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
+    </Window.InputBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -17,12 +25,24 @@
         <ToolBar Grid.Row="0" Height="40">
             <!-- Drawing Tools -->
             <Label Content="Tools:" VerticalAlignment="Center" FontWeight="Bold"/>
-            <Button x:Name="PencilButton" Content="✏️ Pencil" Width="70" Margin="2" Click="PencilButton_Click"/>
-            <Button x:Name="EraserButton" Content="🧹 Eraser" Width="70" Margin="2" Click="EraserButton_Click"/>
-            <Button x:Name="BucketButton" Content="🪣 Fill" Width="60" Margin="2" Click="BucketButton_Click"/>
-            <Button x:Name="RectangleButton" Content="⬜ Rectangle" Width="85" Margin="2" Click="RectangleButton_Click"/>
-            <Button x:Name="CircleButton" Content="⭕ Circle" Width="70" Margin="2" Click="CircleButton_Click"/>
-            <Button x:Name="TextButton" Content="🔤 Text" Width="60" Margin="2" Click="TextButton_Click"/>
+            <Button x:Name="PencilButton" Width="32" Height="32" Margin="2" Click="PencilButton_Click" ToolTip="Pencil">
+                <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            <Button x:Name="EraserButton" Width="32" Height="32" Margin="2" Click="EraserButton_Click" ToolTip="Eraser">
+                <TextBlock Text="&#xE75C;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            <Button x:Name="BucketButton" Width="32" Height="32" Margin="2" Click="BucketButton_Click" ToolTip="Fill">
+                <TextBlock Text="&#xE771;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            <Button x:Name="RectangleButton" Width="32" Height="32" Margin="2" Click="RectangleButton_Click" ToolTip="Rectangle">
+                <TextBlock Text="&#xE739;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            <Button x:Name="CircleButton" Width="32" Height="32" Margin="2" Click="CircleButton_Click" ToolTip="Circle">
+                <TextBlock Text="&#xEA3A;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            <Button x:Name="TextButton" Width="32" Height="32" Margin="2" Click="TextButton_Click" ToolTip="Text">
+                <TextBlock Text="&#xE8D2;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
             
             <Separator Margin="5,0"/>
             
@@ -47,14 +67,22 @@
             <Separator Margin="5,0"/>
             
             <!-- Undo/Redo -->
-            <Button x:Name="UndoButton" Content="↩️ Undo" Width="60" Margin="2" Click="UndoButton_Click"/>
-            <Button x:Name="RedoButton" Content="↪️ Redo" Width="60" Margin="2" Click="RedoButton_Click"/>
+            <Button x:Name="UndoButton" Width="32" Height="32" Margin="2" Click="UndoButton_Click" ToolTip="Undo (Ctrl+Z)">
+                <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            <Button x:Name="RedoButton" Width="32" Height="32" Margin="2" Click="RedoButton_Click" ToolTip="Redo (Ctrl+Y)">
+                <TextBlock Text="&#xE7A6;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
             
             <Separator Margin="5,0"/>
             
             <!-- Save/Open -->
-            <Button x:Name="OpenButton" Content="📂 Open" Width="60" Margin="2" Click="OpenButton_Click"/>
-            <Button x:Name="SaveButton" Content="💾 Save" Width="60" Margin="2" Click="SaveButton_Click"/>
+            <Button x:Name="OpenButton" Width="32" Height="32" Margin="2" Click="OpenButton_Click" ToolTip="Open">
+                <TextBlock Text="&#xE8E5;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            <Button x:Name="SaveButton" Width="32" Height="32" Margin="2" Click="SaveButton_Click" ToolTip="Save (Ctrl+S)">
+                <TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
         </ToolBar>
 
         <!-- Drawing Canvas -->

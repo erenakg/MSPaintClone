@@ -24,8 +24,20 @@ public partial class MainWindow : Window
     private double _fontSize = 14;
     private Ellipse? _cursorPreview;
 
+    // Commands for keyboard shortcuts
+    public System.Windows.Input.ICommand UndoCommand { get; }
+    public System.Windows.Input.ICommand RedoCommand { get; }
+    public System.Windows.Input.ICommand SaveCommand { get; }
+
     public MainWindow()
     {
+        // Initialize commands
+        UndoCommand = new RelayCommand(_ => ExecuteUndo(), _ => _commandManager.CanUndo);
+        RedoCommand = new RelayCommand(_ => ExecuteRedo(), _ => _commandManager.CanRedo);
+        SaveCommand = new RelayCommand(_ => ExecuteSave());
+        
+        DataContext = this;
+        
         InitializeComponent();
         
         // Create cursor preview ellipse for eraser
@@ -138,17 +150,33 @@ public partial class MainWindow : Window
         }
     }
 
-    // Undo/Redo handlers
-    private void UndoButton_Click(object sender, RoutedEventArgs e)
+    // Command execution methods for keyboard shortcuts
+    private void ExecuteUndo()
     {
         _commandManager.Undo();
         UpdateUndoRedoButtons();
     }
 
-    private void RedoButton_Click(object sender, RoutedEventArgs e)
+    private void ExecuteRedo()
     {
         _commandManager.Redo();
         UpdateUndoRedoButtons();
+    }
+
+    private void ExecuteSave()
+    {
+        SaveButton_Click(this, new RoutedEventArgs());
+    }
+
+    // Undo/Redo handlers
+    private void UndoButton_Click(object sender, RoutedEventArgs e)
+    {
+        ExecuteUndo();
+    }
+
+    private void RedoButton_Click(object sender, RoutedEventArgs e)
+    {
+        ExecuteRedo();
     }
 
     // Canvas mouse event handlers
