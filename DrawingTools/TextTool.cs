@@ -2,6 +2,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Point = System.Windows.Point;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace MSPaintClone.DrawingTools;
 

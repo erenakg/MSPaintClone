@@ -133,6 +133,44 @@ public partial class MainWindow : Window
         }
     }
 
+    // More Colors button handler - opens Windows ColorDialog
+    private void MoreColorsButton_Click(object sender, RoutedEventArgs e)
+    {
+        using var colorDialog = new System.Windows.Forms.ColorDialog
+        {
+            AllowFullOpen = true,
+            FullOpen = true
+        };
+
+        if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            var selectedColor = colorDialog.Color;
+            var mediaColor = Color.FromArgb(selectedColor.A, selectedColor.R, selectedColor.G, selectedColor.B);
+            _currentBrush = new SolidColorBrush(mediaColor);
+
+            if (_currentTool != null)
+            {
+                _currentTool.CurrentBrush = _currentBrush;
+            }
+
+            // Update the More Colors button background to show selected color
+            MoreColorsButton.Background = _currentBrush;
+
+            // Clear selection from preset color buttons
+            ClearColorButtonSelection();
+        }
+    }
+
+    private void ClearColorButtonSelection()
+    {
+        ColorBlack.BorderThickness = new Thickness(1);
+        ColorRed.BorderThickness = new Thickness(1);
+        ColorBlue.BorderThickness = new Thickness(1);
+        ColorGreen.BorderThickness = new Thickness(1);
+        ColorYellow.BorderThickness = new Thickness(1);
+        ColorOrange.BorderThickness = new Thickness(1);
+    }
+
     // Thickness slider handler
     private void ThicknessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {

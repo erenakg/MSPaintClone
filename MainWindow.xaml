@@ -54,6 +54,7 @@
             <Button x:Name="ColorGreen" Background="Green" Width="25" Height="25" Margin="2" Click="ColorButton_Click" Tag="Green"/>
             <Button x:Name="ColorYellow" Background="Yellow" Width="25" Height="25" Margin="2" Click="ColorButton_Click" Tag="Yellow"/>
             <Button x:Name="ColorOrange" Background="Orange" Width="25" Height="25" Margin="2" Click="ColorButton_Click" Tag="Orange"/>
+            <Button x:Name="MoreColorsButton" Content="More..." Width="50" Height="25" Margin="2" Click="MoreColorsButton_Click" ToolTip="More Colors..."/>
             
             <Separator Margin="5,0"/>
             

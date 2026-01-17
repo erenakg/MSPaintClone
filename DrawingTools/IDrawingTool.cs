@@ -1,6 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Brush = System.Windows.Media.Brush;
+using Point = System.Windows.Point;
 
 namespace MSPaintClone.DrawingTools;
 
