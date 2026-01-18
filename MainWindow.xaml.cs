@@ -109,21 +109,21 @@ public partial class MainWindow : Window
         UpdateToolButtonStyles();
     }
 
-    // Shapes ComboBox selection handler
-    private void ShapesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    // Shapes button click - opens the context menu
+    private void ShapesButton_Click(object sender, RoutedEventArgs e)
     {
-        // Just updates the selection, actual tool change happens on button click or double-click
+        if (sender is Button button && button.ContextMenu != null)
+        {
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
+        }
     }
 
-    // Draw Shape button click - activates the selected shape tool
-    private void DrawShapeButton_Click(object sender, RoutedEventArgs e)
+    // Shape menu item click - directly activates the selected shape tool
+    private void ShapeMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        ActivateSelectedShapeTool();
-    }
-
-    private void ActivateSelectedShapeTool()
-    {
-        if (ShapesComboBox?.SelectedItem is ComboBoxItem selectedItem && selectedItem.Tag is string shapeType)
+        if (sender is MenuItem menuItem && menuItem.Tag is string shapeType)
         {
             _currentTool = shapeType switch
             {
@@ -341,7 +341,7 @@ public partial class MainWindow : Window
         EraserButton.FontWeight = FontWeights.Normal;
         BucketButton.FontWeight = FontWeights.Normal;
         TextButton.FontWeight = FontWeights.Normal;
-        DrawShapeButton.FontWeight = FontWeights.Normal;
+        ShapesButton.FontWeight = FontWeights.Normal;
 
         // Highlight current tool
         if (_currentTool is PencilTool)
@@ -353,7 +353,7 @@ public partial class MainWindow : Window
         else if (_currentTool is TextTool)
             TextButton.FontWeight = FontWeights.Bold;
         else // Any shape tool
-            DrawShapeButton.FontWeight = FontWeights.Bold;
+            ShapesButton.FontWeight = FontWeights.Bold;
     }
 
     private void UpdateColorButtonStyles()
