@@ -9,6 +9,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MSPaintClone.DrawingTools;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Button = System.Windows.Controls.Button;
+using Color = System.Windows.Media.Color;
+using FontFamily = System.Windows.Media.FontFamily;
+using MessageBox = System.Windows.MessageBox;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using Point = System.Windows.Point;
 
 namespace MSPaintClone;
 
@@ -22,6 +30,7 @@ public partial class MainWindow : Window
     private Brush _currentBrush = Brushes.Black;
     private double _strokeThickness = 3;
     private double _fontSize = 14;
+    private FontFamily _fontFamily = new FontFamily("Segoe UI");
     private Ellipse? _cursorPreview;
 
     // Commands for keyboard shortcuts
@@ -39,6 +48,12 @@ public partial class MainWindow : Window
         DataContext = this;
         
         InitializeComponent();
+        
+        // Populate font family ComboBox
+        if (FontFamilyComboBox != null)
+        {
+            PopulateFontFamilyComboBox();
+        }
         
         // Create cursor preview ellipse for eraser
         _cursorPreview = new Ellipse
@@ -87,25 +102,47 @@ public partial class MainWindow : Window
         UpdateToolButtonStyles();
     }
 
-    private void RectangleButton_Click(object sender, RoutedEventArgs e)
-    {
-        _currentTool = new RectangleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager };
-        HideCursorPreview();
-        UpdateToolButtonStyles();
-    }
-
-    private void CircleButton_Click(object sender, RoutedEventArgs e)
-    {
-        _currentTool = new CircleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager };
-        HideCursorPreview();
-        UpdateToolButtonStyles();
-    }
-
     private void TextButton_Click(object sender, RoutedEventArgs e)
     {
-        _currentTool = new TextTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager };
+        _currentTool = new TextTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, FontFamily = _fontFamily, CommandManager = _commandManager };
         HideCursorPreview();
         UpdateToolButtonStyles();
+    }
+
+    // Shapes button click - opens the context menu
+    private void ShapesButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.ContextMenu != null)
+        {
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
+        }
+    }
+
+    // Shape menu item click - directly activates the selected shape tool
+    private void ShapeMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem menuItem && menuItem.Tag is string shapeType)
+        {
+            _currentTool = shapeType switch
+            {
+                "Line" => new LineTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Rectangle" => new RectangleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Circle" => new CircleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Triangle" => new TriangleTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Diamond" => new DiamondTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Pentagon" => new PentagonTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Hexagon" => new HexagonTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Star" => new StarTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Arrow" => new ArrowTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "RightArrow" => new RightArrowTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                "Heart" => new HeartTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager },
+                _ => new LineTool { CurrentBrush = _currentBrush, StrokeThickness = _strokeThickness, FontSize = _fontSize, CommandManager = _commandManager }
+            };
+            HideCursorPreview();
+            UpdateToolButtonStyles();
+        }
     }
 
     // Color picker handler
@@ -146,7 +183,9 @@ public partial class MainWindow : Window
         {
             var selectedColor = colorDialog.Color;
             var mediaColor = Color.FromArgb(selectedColor.A, selectedColor.R, selectedColor.G, selectedColor.B);
-            _currentBrush = new SolidColorBrush(mediaColor);
+            var brush = new SolidColorBrush(mediaColor);
+            brush.Freeze(); // Freeze for cross-thread access
+            _currentBrush = brush;
 
             if (_currentTool != null)
             {
@@ -154,7 +193,7 @@ public partial class MainWindow : Window
             }
 
             // Update the More Colors button background to show selected color
-            MoreColorsButton.Background = _currentBrush;
+            MoreColorsButton.Background = new SolidColorBrush(mediaColor);
 
             // Clear selection from preset color buttons
             ClearColorButtonSelection();
@@ -186,6 +225,39 @@ public partial class MainWindow : Window
         {
             ThicknessLabel.Content = ((int)_strokeThickness).ToString();
         }
+    }
+
+    // Font family selection handler
+    private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (FontFamilyComboBox?.SelectedItem is string fontName)
+        {
+            _fontFamily = new FontFamily(fontName);
+
+            if (_currentTool != null)
+            {
+                _currentTool.FontFamily = _fontFamily;
+            }
+        }
+    }
+
+    private void PopulateFontFamilyComboBox()
+    {
+        // Add common fonts
+        var commonFonts = new[] 
+        { 
+            "Segoe UI", "Arial", "Times New Roman", "Verdana", 
+            "Courier New", "Georgia", "Tahoma", "Trebuchet MS", 
+            "Comic Sans MS", "Impact", "Calibri", "Consolas"
+        };
+
+        FontFamilyComboBox.Items.Clear();
+        foreach (var fontName in commonFonts)
+        {
+            FontFamilyComboBox.Items.Add(fontName);
+        }
+        
+        FontFamilyComboBox.SelectedIndex = 0; // Select first font (Segoe UI)
     }
 
     // Command execution methods for keyboard shortcuts
@@ -268,9 +340,8 @@ public partial class MainWindow : Window
         PencilButton.FontWeight = FontWeights.Normal;
         EraserButton.FontWeight = FontWeights.Normal;
         BucketButton.FontWeight = FontWeights.Normal;
-        RectangleButton.FontWeight = FontWeights.Normal;
-        CircleButton.FontWeight = FontWeights.Normal;
         TextButton.FontWeight = FontWeights.Normal;
+        ShapesButton.FontWeight = FontWeights.Normal;
 
         // Highlight current tool
         if (_currentTool is PencilTool)
@@ -279,12 +350,10 @@ public partial class MainWindow : Window
             EraserButton.FontWeight = FontWeights.Bold;
         else if (_currentTool is BucketTool)
             BucketButton.FontWeight = FontWeights.Bold;
-        else if (_currentTool is RectangleTool)
-            RectangleButton.FontWeight = FontWeights.Bold;
-        else if (_currentTool is CircleTool)
-            CircleButton.FontWeight = FontWeights.Bold;
         else if (_currentTool is TextTool)
             TextButton.FontWeight = FontWeights.Bold;
+        else // Any shape tool
+            ShapesButton.FontWeight = FontWeights.Bold;
     }
 
     private void UpdateColorButtonStyles()

@@ -34,14 +34,31 @@
             <Button x:Name="BucketButton" Width="32" Height="32" Margin="2" Click="BucketButton_Click" ToolTip="Fill">
                 <TextBlock Text="&#xE771;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
             </Button>
-            <Button x:Name="RectangleButton" Width="32" Height="32" Margin="2" Click="RectangleButton_Click" ToolTip="Rectangle">
-                <TextBlock Text="&#xE739;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
-            </Button>
-            <Button x:Name="CircleButton" Width="32" Height="32" Margin="2" Click="CircleButton_Click" ToolTip="Circle">
-                <TextBlock Text="&#xEA3A;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
-            </Button>
             <Button x:Name="TextButton" Width="32" Height="32" Margin="2" Click="TextButton_Click" ToolTip="Text">
                 <TextBlock Text="&#xE8D2;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+            </Button>
+            
+            <!-- Shapes Dropdown Button -->
+            <Button x:Name="ShapesButton" Width="40" Height="32" Margin="2" Click="ShapesButton_Click" ToolTip="Shapes">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE739;" FontFamily="Segoe MDL2 Assets" FontSize="16"/>
+                    <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="8" VerticalAlignment="Bottom" Margin="2,0,0,0"/>
+                </StackPanel>
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="ShapesContextMenu">
+                        <MenuItem Header="Line" Tag="Line" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Rectangle" Tag="Rectangle" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Circle" Tag="Circle" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Triangle" Tag="Triangle" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Diamond" Tag="Diamond" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Pentagon" Tag="Pentagon" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Hexagon" Tag="Hexagon" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Star" Tag="Star" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Arrow" Tag="Arrow" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Right Arrow" Tag="RightArrow" Click="ShapeMenuItem_Click"/>
+                        <MenuItem Header="Heart" Tag="Heart" Click="ShapeMenuItem_Click"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
             </Button>
             
             <Separator Margin="5,0"/>
@@ -64,6 +81,13 @@
                     VerticalAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1"
                     ValueChanged="ThicknessSlider_ValueChanged"/>
             <Label x:Name="ThicknessLabel" Content="3" Width="30" VerticalAlignment="Center"/>
+            
+            <Separator Margin="5,0"/>
+            
+            <!-- Font Family -->
+            <Label Content="Font:" VerticalAlignment="Center" FontWeight="Bold"/>
+            <ComboBox x:Name="FontFamilyComboBox" Width="120" Height="25" VerticalAlignment="Center"
+                      SelectionChanged="FontFamilyComboBox_SelectionChanged"/>
             
             <Separator Margin="5,0"/>
             

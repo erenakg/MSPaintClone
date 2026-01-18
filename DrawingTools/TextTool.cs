@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
+using FontFamily = System.Windows.Media.FontFamily;
 using Point = System.Windows.Point;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -21,6 +22,7 @@ public class TextTool : IDrawingTool
     public Brush CurrentBrush { get; set; } = Brushes.Black;
     public double StrokeThickness { get; set; } = 2;
     public double FontSize { get; set; } = 14;
+    public FontFamily? FontFamily { get; set; }
     public CommandManager? CommandManager { get; set; }
 
     public void OnMouseDown(Canvas canvas, Point position)
@@ -39,6 +41,7 @@ public class TextTool : IDrawingTool
             BorderThickness = new Thickness(1),
             Foreground = CurrentBrush,
             FontSize = _currentFontSize,
+            FontFamily = FontFamily ?? new FontFamily("Segoe UI"),
             MinWidth = 100,
             MinHeight = Math.Max(25, (int)(_currentFontSize * 1.5)),
             Padding = new Thickness(2),
@@ -118,6 +121,7 @@ public class TextTool : IDrawingTool
                 Text = text,
                 Foreground = CurrentBrush,
                 FontSize = fontSize,
+                FontFamily = FontFamily ?? new FontFamily("Segoe UI"),
                 Background = Brushes.Transparent
             };
 

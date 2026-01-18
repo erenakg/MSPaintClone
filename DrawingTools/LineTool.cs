@@ -10,11 +10,11 @@ using Point = System.Windows.Point;
 namespace MSPaintClone.DrawingTools;
 
 /// <summary>
-/// Pencil tool for freehand drawing using Polyline.
+/// Line tool for drawing straight lines.
 /// </summary>
-public class PencilTool : IDrawingTool
+public class LineTool : IDrawingTool
 {
-    private Polyline? _currentLine;
+    private Line? _currentLine;
     private bool _isDrawing;
 
     public Brush CurrentBrush { get; set; } = Brushes.Black;
@@ -26,15 +26,17 @@ public class PencilTool : IDrawingTool
     public void OnMouseDown(Canvas canvas, Point position)
     {
         _isDrawing = true;
-        _currentLine = new Polyline
+
+        _currentLine = new Line
         {
             Stroke = CurrentBrush,
             StrokeThickness = StrokeThickness,
-            StrokeLineJoin = PenLineJoin.Round,
-            StrokeStartLineCap = PenLineCap.Round,
-            StrokeEndLineCap = PenLineCap.Round
+            X1 = position.X,
+            Y1 = position.Y,
+            X2 = position.X,
+            Y2 = position.Y
         };
-        _currentLine.Points.Add(position);
+
         canvas.Children.Add(_currentLine);
     }
 
@@ -43,7 +45,8 @@ public class PencilTool : IDrawingTool
         if (!_isDrawing || _currentLine == null)
             return;
 
-        _currentLine.Points.Add(position);
+        _currentLine.X2 = position.X;
+        _currentLine.Y2 = position.Y;
     }
 
     public void OnMouseUp(Canvas canvas, Point position)
@@ -55,11 +58,19 @@ public class PencilTool : IDrawingTool
         var completedLine = _currentLine;
         _currentLine = null;
 
-        // Remove from canvas first (CommandManager will re-add it)
-        canvas.Children.Remove(completedLine);
+        double dx = completedLine.X2 - completedLine.X1;
+        double dy = completedLine.Y2 - completedLine.Y1;
+        double length = Math.Sqrt(dx * dx + dy * dy);
 
-        // Push command to undo stack
-        var command = new AddShapeCommand(canvas, completedLine);
-        CommandManager?.ExecuteCommand(command);
+        if (length > 5)
+        {
+            canvas.Children.Remove(completedLine);
+            var command = new AddShapeCommand(canvas, completedLine);
+            CommandManager?.ExecuteCommand(command);
+        }
+        else
+        {
+            canvas.Children.Remove(completedLine);
+        }
     }
 }
